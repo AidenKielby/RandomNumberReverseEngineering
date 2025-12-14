@@ -7,7 +7,6 @@ import SAT.classes.CNF;
 import SAT.classes.Clause;
 import SAT.classes.IterationResult;
 import SAT.classes.Literal;
-import SAT.classes.Variable;
 
 public class SATSolver {
 
@@ -64,9 +63,35 @@ public class SATSolver {
 
 
    private IterationResult evaluate(CNF cnf, boolean result) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'evaluate'");
-}
+        // Evaluate the CNF formula: all clauses must be satisfied
+        boolean cnfSatisfied = true;
+        
+        for (Clause clause : cnf.getClauses()) {
+            // A clause is satisfied if at least one literal is true
+            boolean clauseSatisfied = false;
+            
+            for (Literal literal : clause.getLiterals()) {
+                // A literal is true if it's not negated, false if it is negated
+                // (Assuming the variable value is determined by the negation state)
+                boolean literalValue = !literal.isNegated();
+                
+                if (literalValue) {
+                    clauseSatisfied = true;
+                    break;
+                }
+            }
+            
+            if (!clauseSatisfied) {
+                cnfSatisfied = false;
+                break;
+            }
+        }
+        
+        // Check if the CNF evaluation matches the expected result
+        boolean found = (cnfSatisfied == result);
+        
+        return new IterationResult(cnf, found);
+    }
 
 
 
